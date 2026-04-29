@@ -144,7 +144,7 @@ python pretrain_CRNN.py \
 **Important:** Run this from the project root directory, not from inside the CRNN folder. The models are in the root-level `models/` folder, so the import `from models.CRNN import CRNN` will work.
 
 **Where you are:**
-- Run from: `/home/namashivayaa/DLCV Project/DUAL for OCR/` (project root)
+- Run from: `./DLCV Project/DUAL for OCR/` (project root)
 
 #### For SVTR:
 ```bash
@@ -166,7 +166,7 @@ python pretrain_SVTR.py \
 **Important:** Run this from the project root directory, not from inside the SVTR folder. The models are in the root-level `models/` folder, so the import `from models.SVTR import SVTR` will work.
 
 **Where you are:**
-- Run from: `/home/namashivayaa/DLCV Project/DUAL for OCR/` (project root)
+- Run from: `./DLCV Project/DUAL for OCR/` (project root)
 
 **Key Arguments:**
 - `--arch`: Model architecture (CRNN, SVTR, or VisionLAN)
@@ -195,7 +195,7 @@ python pretrain_VLAN.py \
 **Important:** Run this from the project root directory, not from inside the VLAN folder. The model is in the root-level `models/` folder, so the import `from models.VisionLAN import VisionLAN` will work.
 
 **Where you are:**
-- Run from: `/home/namashivayaa/DLCV Project/DUAL for OCR/` (project root)
+- Run from: `./DLCV Project/DUAL for OCR/` (project root)
 
 ### **Step 2: Compute Importance Scores**
 
@@ -215,7 +215,7 @@ python importance_evaluation_CRNN.py \
 **Important:** Run this from the project root directory.
 
 **Where you are:**
-- Run from: `/home/namashivayaa/DLCV Project/DUAL for OCR/` (project root)
+- Run from: `./DLCV Project/DUAL for OCR/` (project root)
 
 #### For SVTR:
  ```bash
@@ -231,7 +231,7 @@ python importance_evaluation_CRNN.py \
 **Important:** Run this from the project root directory.
 
 **Where you are:**
-- Run from: `/home/namashivayaa/DLCV Project/DUAL for OCR/` (project root)
+- Run from: `./DLCV Project/DUAL for OCR/` (project root)
 
 #### For VisionLAN:
 ```bash
@@ -247,7 +247,7 @@ python importance_evaluation_VLAN.py \
 **Important:** Run this from the project root directory.
 
 **Where you are:**
-- Run from: `/home/namashivayaa/DLCV Project/DUAL for OCR/` (project root)
+- Run from: `./DLCV Project/DUAL for OCR/` (project root)
 
 **Key Arguments:**
 - `--dynamics_path`: Directory containing dynamics from pretraining
