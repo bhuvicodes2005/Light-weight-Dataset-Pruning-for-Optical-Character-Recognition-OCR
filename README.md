@@ -377,7 +377,7 @@ python pretrain_subset_VLAN.py \
 
 ### **Step 4: Fine-tuning on Real-world Datasets**
 
-Fine-tune models pretrained on full or pruned data on real-world OCR benchmarks. The finetune scripts accept `--checkpoint` for initial weights and `--resume` for continuing from a `.pth.tar` training state. The older `--pretrained_model` name is not used in these scripts.
+Fine-tune models pretrained on full or pruned data on real-world OCR benchmarks. The finetune scripts accept `--checkpoint` for initial weights and `--resume` for continuing from a `.pth.tar` training state.
 
 You can replace the checkpoint path with any checkpoint file you want from the save directory. For pretraining and pretrain-subset runs, the epoch-based naming pattern is `epoch_<no>_ckpt.pth.tar` and `epoch_<no>_subset_ckpt.pth.tar`. For the finetune scripts, the current saved files are `best_ckpt.pth.tar` and `last_ckpt.pth.tar`, so use whichever checkpoint you want to test or resume from.
 
@@ -458,47 +458,6 @@ python test_svt.py \
 
 ## ⚙️ Important Notes
 
-### **File Location Requirements - CRITICAL**
-
-**All scripts MUST be run from the project root directory**, not from inside subdirectories. Here's why:
-
-- Models are located at: `/DLCV Project/DUAL for OCR/models/` (root level)
-- When scripts try to import with `from models.CRNN import CRNN`, Python searches relative to where you run the command
-- If you run from inside CRNN/ or SVTR/, the import fails because models/ is not a subdirectory there
-
-### **Checkpoint Directory Structure**
-
-When you run pretraining with `--save_path ./save_CRNN`, the actual directory structure created is:
-```
-./save_CRNN/
-└── MJSynth/              # Dataset name (from --dataset arg, default='MJSynth')
-    └── 42/               # Random seed (from --manualSeed arg, default=42)
-        ├── epoch_001_ckpt.pth.tar
-        ├── epoch_002_ckpt.pth.tar
-        ├── ...
-        ├── best_ckpt.pth.tar
-        ├── last_ckpt.pth.tar
-        ├── npy/          # Dynamics folder (when --dynamics is used)
-        │   ├── 0_Loss.npy
-        │   ├── 0_Index.npy
-        │   ├── 0_Prob.npy
-        │   ├── 0_Labels.npy
-        │   └── ...
-        └── importance_scores/  # Importance scores (from importance_evaluation script)
-            ├── dual_mask_T5.npy
-            └── ...
-```
-
-**Therefore:** If you use default seed (42) and dataset (MJSynth), all paths include `MJSynth/42/`. If you change seed with `--manualSeed 123`, use `MJSynth/123/` instead.
-
-**✅ CORRECT WAY:**
-```bash
-cd "DLCV Project/DUAL for OCR"  # Navigate to project root
-python pretrain_CRNN.py --arch CRNN ...
-python pretrain_SVTR.py --arch SVTR ...
-python pretrain_subset.py --arch CRNN ...
-```
-
 **Save directory naming convention:**
 
 - Pretraining saves: `./save_<ARCH>` (e.g., `./save_CRNN`, `./save_SVTR`)
@@ -509,13 +468,15 @@ This keeps checkpoints and dynamics easy to find and consistent across experimen
 Note: Model weights are saved after every epoch for all `pretrain` and `pretrain_subset` runs. Checkpoints are written to the corresponding save directories with the dataset+seed subdirectories (for example `./save_CRNN/MJSynth/42/`) and can be used to resume training. To resume, use the `--resume` argument with the path to the checkpoint `.pth.tar` file, e.g.:
 
 ```bash
-python pretrain_CRNN.py --resume ./save_CRNN/MJSynth/42/epoch_005_ckpt.pth.tar
-```
-
-**❌ WRONG WAY (will cause ModuleNotFoundError):**
-```bash
-cd "DLCV Project/DUAL for OCR/CRNN"  # DON'T do this!
-python pretrain_CRNN.py --arch CRNN ...  # Will fail: No module named 'models'
+python pretrain_CRNN.py \
+    --arch CRNN \
+    --data_dir ./data/MJSynth \
+    --epochs 12 \
+    --batch-size 1024 \
+    --learning-rate 1e-3 \
+    --save_path ./save_CRNN \
+    --dynamics
+    --resume ./save_CRNN/MJSynth/42/epoch_005_ckpt.pth.tar
 ```
 
 ### **Script Organization**
@@ -578,24 +539,15 @@ Below is an example of expected performance gains with DUAL-based pruning:
 
 **Key Insight**: With DUAL, you can reduce training data by 30-50% while maintaining >99% of the original accuracy, resulting in significant speedup with minimal accuracy loss.
 
-## 🔬 Understanding DUAL Scoring
 
-DUAL (Dataset Utility via Learnable probabilities) computes importance scores by:
-
-1. **Ease Computation**: Convert per-sample loss to ease `p = exp(-loss)`
-2. **Window-based Uncertainty**: For sliding windows, compute mean ease and uncertainty
-3. **Importance Score**: `score = (1 - ease) × uncertainty`
-   - Samples with high loss (hard to learn) get higher scores
-   - Samples with variable loss (informative) get higher scores
-4. **Ranking**: Sort all samples by score to create a pruning mask
 
 ## 📚 References
 
 Key papers and implementation links:
-- [DUAL paper](https://arxiv.org/abs/2502.06905)
-- [CRNN paper](https://arxiv.org/abs/1507.05717)
-- [SVTR paper](https://arxiv.org/abs/2205.00159)
-- [VisionLAN implementation in this repo](models/VisionLAN.py)
+- [DUAL](https://arxiv.org/abs/2502.06905)
+- [CRNN](https://arxiv.org/abs/1507.05717)
+- [SVTR](https://arxiv.org/abs/2205.00159)
+
 
 ## 📝 Citation
 
@@ -613,23 +565,5 @@ If you use DUAL in your research, please cite:
 
 This project is licensed under the MIT License.
 
-## ❓ FAQ
-
-**Q: Which model should I use?**  
-A: Start with CRNN for speed, SVTR for best accuracy, VisionLAN for a balance.
-
-**Q: How do I reduce the dataset size further?**  
-A: Increase pruning ratio (e.g., `--subset_rate 0.2` for 20%) or use `--keep lowest` to keep lowest-scoring samples.
-
-**Q: What if importance_evaluation fails?**  
-A: Ensure `--dynamics_path` contains `epoch_*.npy` files from pretraining with `--dynamics` flag.
-
-**Q: Can I use pretrained models from other sources?**  
-A: Yes, load them with `--resume` or `--checkpoint` arguments in fine-tuning scripts.
-
-**Q: How much faster is pruned training?**  
-A: Approximately linear speedup: 50% pruning ≈ 2x faster, 30% pruning ≈ 3.3x faster.
-
----
 
 **Last Updated**: April 2026
