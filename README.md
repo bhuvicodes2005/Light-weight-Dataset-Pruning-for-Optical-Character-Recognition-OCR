@@ -10,6 +10,8 @@ The complete workflow involves:
 3. **Training on Pruned Subsets** using high-importance samples only
 4. **Fine-tuning & Testing** on real-world OCR datasets (ICDAR, IIIT5K, SVT)
 
+![Alt text](realworld_test_word_accuracy_point.png)
+![Alt text](realworld_test_word_accuracy_point.png)
 ## 🎯 Key Features
 
 - **Intelligent Dataset Pruning**: DUAL scoring identifies the most important samples for training
