@@ -548,12 +548,3 @@ Key papers and implementation links:
 - [CRNN](https://arxiv.org/abs/1507.05717)
 - [SVTR](https://arxiv.org/abs/2205.00159)
 
-
-
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
-
-**Last Updated**: April 2026
