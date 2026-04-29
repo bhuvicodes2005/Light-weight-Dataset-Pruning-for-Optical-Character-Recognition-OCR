@@ -2,7 +2,7 @@
 
 ## 📖 Overview
 
-This repository implements our adaption of **DUAL** framework, based on the paper [Lightweight Dataset Pruning without Full Training via Example Difficulty and Prediction Uncertainty](https://arxiv.org/abs/2502.06905). DUAL identifies and selectively removes redundant or less informative samples from training datasets while maintaining or improving model performance, thereby reducing training time and computational costs.
+This repository implements our adaptation of **DUAL** [Lightweight Dataset Pruning without Full Training via Example Difficulty and Prediction Uncertainty](https://arxiv.org/abs/2502.06905) framework to sequence-level OCR . DUAL identifies and selectively removes redundant or less informative samples from training datasets while maintaining or improving model performance, thereby reducing training time and computational costs.
 
 The complete workflow involves:
 1. **Pre-training** on full synthetic dataset (MJSynth) to collect training dynamics
