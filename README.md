@@ -1,4 +1,4 @@
-# Lightweight Dataset Pruning without Full Training via Example Difficulty and Prediction Uncertainty (DUAL)
+# Exploring Dataset Pruning for Scene Text Recognition
 
 ## 📖 Overview
 
