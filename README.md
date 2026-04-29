@@ -549,17 +549,7 @@ Key papers and implementation links:
 - [SVTR](https://arxiv.org/abs/2205.00159)
 
 
-## 📝 Citation
 
-If you use DUAL in your research, please cite:
-
-```bibtex
-@article{dual_ocr,
-  title={DUAL: Intelligent Dataset Pruning for OCR Models via Training Dynamics},
-  author={Your Name},
-  year={2026}
-}
-```
 
 ## 📄 License
 
