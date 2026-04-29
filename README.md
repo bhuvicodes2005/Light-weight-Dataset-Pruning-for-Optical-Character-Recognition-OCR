@@ -475,16 +475,11 @@ python pretrain_CRNN.py \
     --batch-size 1024 \
     --learning-rate 1e-3 \
     --save_path ./save_CRNN \
-    --dynamics
+    --dynamics \
     --resume ./save_CRNN/MJSynth/42/epoch_005_ckpt.pth.tar
 ```
 
 ### **Script Organization**
-- **Root-level scripts**: Run from project root
-  - `pretrain_subset.py`
-  - `finetune_*.py`
-  - `test_*.py`
-  - `download_MJSynth.py`
 
 - **CRNN-specific scripts**: Located at project root (run with `python <script>.py`)
     - `pretrain_CRNN.py`
